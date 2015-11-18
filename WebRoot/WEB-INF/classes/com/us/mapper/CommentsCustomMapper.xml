@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.us.mapper.CommentsCustomMapper">
+
+<!-- 通过aid来查询评论 -->
+<select id="findCommentsCustomByAid" parameterType="com.us.po.PageBean" resultType="com.us.po.CommentsCustom">
+  select * from us_comments where us_comments.aid=#{aid} ORDER BY created DESC limit #{start},#{numperpage}
+</select>
+
+<!-- 通过coid来查询回复的评论 -->
+<select id="findCommentsCustomByCoid" parameterType="int" resultType="com.us.po.CommentsCustom">
+      select * from us_comments where us_comments.coid=#{coid}
+</select>
+
+<!-- 添加评论 -->
+<insert id="insertCommentsCustom" parameterType="com.us.po.CommentsCustom">
+insert into us_comments(aid,created,author,authorid,ip,agent,text,status,parent)
+values(#{aid},#{created},#{author},#{authorid},#{ip},#{agent},#{text},#{status},#{parent})
+</insert>
+
+<!-- 通过aid来查询评论的总数 -->
+<select id="findtotalRecordNum" parameterType="int" resultType="int">
+select count(*) from us_comments where us_comments.aid=#{aid}
+</select>
+</mapper>

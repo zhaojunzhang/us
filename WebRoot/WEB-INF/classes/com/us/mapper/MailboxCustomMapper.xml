@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.us.mapper.MailboxCustomMapper">
+	<!-- 查询总记录条数 -->
+	<select id="findtotalRecordNum" parameterType="int" resultType="java.lang.Integer">
+		select count(*) from us_mailbox  where us_mailbox.uid=#{uid}
+	</select>
+	<!-- 物理分页查询用户个人信箱 -->
+	<select id="findByPageByUid" parameterType="com.us.po.PageBean" resultType="com.us.po.MailboxCustom">
+	     select * from us_mailbox  where us_mailbox.uid=#{uid} ORDER BY sendtime DESC limit #{start},#{numperpage}
+	</select>
+	<!-- 根据mailid来查询信箱信息 -->
+	<select id="findMailboxById" parameterType="int" resultType="com.us.po.MailboxCustom">
+	     select * from us_mailbox where us_mailbox.mailid=#{mailid}
+	</select>
+	<!-- 插入回复信箱信息 -->
+	<insert id="insertReplyMailbox" parameterType="com.us.po.MailboxCustom"
+	   useGeneratedKeys="true" keyProperty="mailid">
+		insert into
+		us_mailbox(uid,title,content,ip,agent,sendid,sendtime,receivetime
+		)
+		values(#{uid},#{title},#{content},#{ip},#{agent},#{sendid},#{sendtime},#{receivetime}
+		)
+	</insert>
+	<!-- 根据mailid来删除邮件信息 -->
+	<delete id="delMailboxById" parameterType="int">
+	  DELETE FROM us_mailbox WHERE us_mailbox.mailid =#{mailid}
+	</delete>
+</mapper>

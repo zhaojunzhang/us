@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.us.mapper.UsersCustomMapper">
+
+	<!--用户注册 -->
+	<insert id="insertUsers" parameterType="com.us.po.UsersCustom"
+	  useGeneratedKeys="true" keyProperty="uid">
+		insert into
+		us_users(username,password,email,phone,male,type,avator,created,loged,ip,gid,agent,nickname
+		)
+		values(#{username},#{password},#{email},#{phone},#{male},#{type},#{avator},#{created},#{loged},#{ip},#{gid},#{agent},#{nickname}
+		)
+	</insert>
+	
+	<!-- 查询所有用户 -->
+	<select id="findAllUsers" parameterType="com.us.po.PageBean" resultType="com.us.po.UsersCustom">
+		SELECT us_users.* FROM
+		us_users limit #{start},#{numperpage}
+	</select>
+	
+	<!-- 根据用户的手机来查询用户 -->
+	<select id="findUsersCustomByPhone" parameterType="String" resultType="com.us.po.UsersCustom">
+	SELECT us_users.* FROM us_users where us_users.phone =#{phone}
+	</select>
+	
+	
+	<!--根据用户名和密码来查询用户 -->
+	<select id="findUsernameAndPassword" parameterType="com.us.po.UsersCustom"
+		resultType="com.us.po.UsersCustom">
+		SELECT us_users.* FROM us_users where
+		us_users.username=#{username} AND
+		us_users.password=#{password}
+	</select>
+	
+	<!-- 根据用户名来查询用户-->
+	<select id="findUserByUserName" parameterType="String" resultType="com.us.po.UsersCustom">
+	SELECT us_users.* FROM us_users where us_users.username =#{username}
+	</select>
+	
+	<!-- 根据ID来查询用户 -->
+	<select id="findUserById" parameterType="int" resultType="com.us.po.UsersCustom">
+		SELECT us_users.* FROM us_users where us_users.uid =#{uid}
+	</select>
+	
+	<!-- 根据用户id来更改用户 -->
+    <update id="updateUserById" parameterType="com.us.po.UsersCustom">
+    UPDATE us_users SET us_users.email=#{email},us_users.male=#{male},us_users.avator=#{avator},us_users.nickname=#{nickname} WHERE us_users.uid =#{uid}
+    </update>
+    
+	<!-- 条件根据手机号来查询用户 -->
+	<select id="findUserByPhoneCondition" parameterType="com.us.po.PageBean" resultType="com.us.po.UsersCustom">
+	   SELECT * FROM us_users WHERE us_users.phone LIKE '%${conditionValue}%' LIMIT #{start},#{numperpage}
+	</select>
+	
+	<!-- 条件根据用户名来查询用户 -->
+	<select id="findUserByUsernameCondition" parameterType="com.us.po.PageBean" resultType="com.us.po.UsersCustom">
+	   SELECT * FROM us_users WHERE us_users.username LIKE '%${conditionValue}%' LIMIT #{start},#{numperpage}
+	</select>
+	
+	<!-- 条件根据昵称来查询用户 -->
+	<select id="findUserByNicknameCondition" parameterType="com.us.po.PageBean" resultType="com.us.po.UsersCustom">
+	   SELECT * FROM us_users WHERE us_users.nickname LIKE '%${conditionValue}%' LIMIT #{start},#{numperpage}
+	</select>
+	
+	<!-- 根据手机号来查询总记录条数 -->
+	<select id="findtotalRecordNumByPhone" parameterType="com.us.po.PageBean" resultType="java.lang.Integer">
+		select count(*) from us_users WHERE us_users.phone LIKE '%${conditionValue}%'
+	</select>
+	
+	<!-- 根据用户名来查询总记录条数 -->
+	<select id="findtotalRecordNumByUsername" parameterType="com.us.po.PageBean" resultType="java.lang.Integer">
+		select count(*) from us_users WHERE us_users.username LIKE '%${conditionValue}%' 
+	</select>
+	
+	<!-- 根据昵称来查询总记录条数 -->
+	<select id="findtotalRecordNumByNickname" parameterType="com.us.po.PageBean" resultType="java.lang.Integer">
+		select count(*) from us_users WHERE us_users.nickname LIKE '%${conditionValue}%' 
+	</select>
+	
+	<!-- 根据用户uid来删除用户 -->
+	<delete id="deleteUserById" parameterType="int" >
+	DELETE FROM us_users WHERE us_users.uid =#{uid}
+	</delete>
+	
+	<!-- 根据邮箱来查询用户 -->
+	<select id="findUserByEmail" parameterType="com.us.po.UsersCustom" resultType="com.us.po.UsersCustom">
+	SELECT us_users.* FROM us_users where us_users.email=#{email} and us_users.username=#{username}
+	</select>
+	
+	<!-- 通过用户分组gid来写查询用户 -->
+	<select id="findUserByGid" parameterType="int" resultType="com.us.po.UsersCustom">
+	SELECT us_users.* FROM us_users where us_users.gid=#{gid}
+	</select>
+	<!-- 更新用户登录时间 ，和用户的客户端系统和ip-->
+	<update id="updateUserLoged" parameterType="com.us.po.UsersCustom">
+    UPDATE us_users SET us_users.loged=#{loged},us_users.agent=#{agent},us_users.ip=#{ip} WHERE us_users.uid =#{uid}
+    </update>
+    <!-- 更新用户的密码 -->
+    <update id="updateUserPasswordById" parameterType="com.us.po.UsersCustom">
+    UPDATE us_users SET us_users.password=#{password} WHERE us_users.uid =#{uid}
+    </update>
+    <!-- 更新用户的绑定手机号 -->
+    <update id="updateUserPhoneById" parameterType="com.us.po.UsersCustom">
+    UPDATE us_users SET us_users.phone=#{phone} WHERE us_users.uid =#{uid}
+    </update>
+    
+    <!-- 查询用户总记录条数 -->
+	<select id="findtotalRecordNum" resultType="java.lang.Integer">
+		select count(*) from us_users 
+	</select>
+	
+	
+	 <!-- 更新用户的权限 -->
+    <update id="updateUsersAuthorityByGid" parameterType="com.us.po.UsersCustom">
+    UPDATE us_users SET us_users.gid=#{gid} WHERE us_users.uid =#{uid}
+    </update>
+    
+    <!-- 根据邮箱来查询用户名 -->
+    <select id="findUsernameByEmail" resultType="java.lang.String" parameterType="java.lang.String">
+		select username from us_users where us_users.email=#{email}
+	</select>
+</mapper>

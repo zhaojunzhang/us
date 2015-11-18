@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.us.mapper.Product_commentsMapper">
+	
+	<!-- //按pid查询商品评论的总数-->
+	<select id="countProduct_ommentsByPid" parameterType="int"	resultType="int" >
+	SELECT COUNT(*) FROM us_product_comments WHERE pid=#{pid}
+	</select>
+	
+	<!-- 分页查询商品评论 -->
+	<select id="findCommentByPage" parameterType="com.us.po.PageBean"	resultType="com.us.po.Product_commentsExtend">
+	SELECT * FROM us_product_comments WHERE pid=#{pid} order by created desc LIMIT #{start},#{numperpage}
+	</select>
+
+	<!-- //插入评论 -->
+	<insert id="insertProduct_comments" parameterType="com.us.po.Product_commentsExtend"
+		useGeneratedKeys="true" keyProperty="commenid" >
+	INSERT INTO us_product_comments (us_product_comments.pid,us_product_comments.uid,us_product_comments.content,us_product_comments.created,us_product_comments.comment)
+	                 VALUE(#{pid},#{uid},#{content},#{created},#{comment})
+	
+	</insert>
+	
+</mapper>

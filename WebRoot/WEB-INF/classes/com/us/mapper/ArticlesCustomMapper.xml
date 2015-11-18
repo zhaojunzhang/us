@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.us.mapper.ArticlesCustomMapper">
+<!--添加文章 -->
+	<insert id="insertArticles" parameterType="com.us.po.ArticlesCustom"
+	  useGeneratedKeys="true" keyProperty="aid">
+		insert into
+		us_articles(cid,ip,agent,title,slug,author,created,modified,content,template,type,status,allowcomment,views,authorid,count
+		)
+		values(#{cid},#{ip},#{agent},#{title},#{slug},#{author},#{created},#{modified},#{content},#{template},#{type},#{status},#{allowcomment},#{views},#{authorid},#{count}
+		)
+	</insert>
+	
+	<!-- 根据cid来进行分页查询数据 -->
+	<select id="findArticlesCustom" parameterType="com.us.po.PageBean" resultType="com.us.po.ArticlesCustom">
+		SELECT us_articles.* FROM
+		us_articles where us_articles.cid=#{cid} ORDER BY created DESC limit #{start},#{numperpage} 
+	</select>
+	
+	<!-- 根据cid来查询总记录条数 -->
+	<select id="findtotalRecordNum" parameterType="int" resultType="java.lang.Integer">
+		select count(*) from us_articles where us_articles.cid=#{cid}
+	</select>
+	
+	<!-- 根据aid来查询文章的详细信息 -->
+	<select id="findArticlesCustomByAid" parameterType="int" resultType="com.us.po.ArticlesCustom">
+	SELECT us_articles.* FROM
+		us_articles where us_articles.aid=#{aid}
+	</select>
+	
+	<!-- 根据aid来删除文章信息 -->
+	<delete id="delArticlesCustomByAid" parameterType="int">
+	DELETE FROM us_articles WHERE us_articles.aid =#{aid}
+	</delete>
+	
+	<!-- 根据uid 并按照作者来进行模糊查询 -->
+	<select id="findArticlesByAuthor" parameterType="com.us.po.PageBean" resultType="com.us.po.ArticlesCustom">
+	   SELECT * FROM us_articles WHERE us_articles.cid=#{cid} and us_articles.author LIKE '%${conditionValue}%' ORDER BY created DESC LIMIT #{start},#{numperpage}
+	</select>
+	
+		
+	<!-- 根据uid 并根据标题来进行模糊查询 -->
+	<select id="findArticlesByTitle" parameterType="com.us.po.PageBean" resultType="com.us.po.ArticlesCustom">
+	   SELECT * FROM us_articles WHERE us_articles.cid=#{cid} and us_articles.title LIKE '%${conditionValue}%' ORDER BY created DESC LIMIT #{start},#{numperpage}
+	</select>
+
+    <!-- 根据cid来查询总记录条数 -->
+	<select id="findtotalRecordNumByTitle" parameterType="com.us.po.PageBean" resultType="java.lang.Integer">
+		select count(*) from us_articles where us_articles.cid=#{cid} and us_articles.title LIKE '%${conditionValue}%' 
+	</select>
+	
+	<!-- 根据cid来查询总记录条数 -->
+	<select id="findtotalRecordNumByAuthor" parameterType="com.us.po.PageBean" resultType="java.lang.Integer">
+		select count(*) from us_articles where us_articles.cid=#{cid} and us_articles.author LIKE '%${conditionValue}%' 
+	</select>
+	<!-- 通过aid实现点赞功能 -->
+	<update id="updateArticlesCountByAid" parameterType="com.us.po.ArticlesCustom">
+	UPDATE us_articles SET us_articles.count=#{count} WHERE us_articles.aid=#{aid}
+	</update>
+	<!-- 通过aid来整加浏览次数 -->
+	<update id="updateArticlesViewsByAid" parameterType="com.us.po.ArticlesCustom">
+	UPDATE us_articles SET us_articles.views=#{views} WHERE us_articles.aid=#{aid}
+	</update>
+	
+	<!-- 通过cid来查询三条最新的文章 -->
+	<select id="findArticlesByCid" parameterType="com.us.po.SchoolLife" resultType="com.us.po.ArticlesCustom">
+		SELECT us_articles.* FROM
+		us_articles where us_articles.cid=#{cid} ORDER BY views DESC limit #{start},#{numperpage} 
+	</select>
+	
+	<!-- 通过作者来查询文章 -->
+	<select id="findArticlesByAuthorId" parameterType="com.us.po.PageBean" resultType="com.us.po.ArticlesCustom">
+	SELECT us_articles.* FROM
+		us_articles where us_articles.authorid=#{authorid} ORDER BY created DESC limit #{start},#{numperpage} 
+	</select>
+	
+	<!-- 通过作者id来查询文章的总数 -->
+	<select id="findtotalRecordNumByAuthorId" parameterType="com.us.po.PageBean" resultType="int"> 
+	   	select count(*) from us_articles where us_articles.authorid=#{authorid}
+	</select>
+	
+	<!-- 通过aid来更新文章 -->
+	<update id="updateArticlesCustomByAid" parameterType="com.us.po.ArticlesCustom">
+	UPDATE us_articles SET us_articles.title=#{title},us_articles.slug=#{slug},us_articles.content=#{content} WHERE us_articles.aid=#{aid}
+	</update>
+</mapper>

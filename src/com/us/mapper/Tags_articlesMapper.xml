@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.us.mapper.Tags_articlesMapper">
+<!--添加文章和标签的id -->
+	<insert id="insertTagsArticles" parameterType="com.us.po.Tags_articles"
+	  useGeneratedKeys="true" keyProperty="aid">
+		insert into
+		us_tags_articles(tid,aid
+		)
+		values(#{tid},#{aid}
+		)
+	</insert>
+	
+	<!-- 根据文章的aid来查询标签的tid -->
+	<select id="findTidByAid" parameterType="int" resultType="com.us.po.Tags_articles">
+	select us_tags_articles.* from us_tags_articles where us_tags_articles.aid=#{aid}	
+	</select>
+	
+	<!-- 根据文章的aid来删除信息 -->
+	<delete id="delTidByAid" parameterType="int">
+		DELETE FROM us_tags_articles WHERE us_tags_articles.aid =#{aid}
+	</delete>
+</mapper>

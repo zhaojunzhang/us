@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.us.mapper.Product_categoriesMapper">
+
+  <!-- 插入商品分类 -->
+	<insert id="insertPcategories" parameterType="com.us.po.Product_categories"
+		useGeneratedKeys="true" keyProperty="pcid">
+		INSERT INTO
+		us_product_categories(pcname,us_product_categories.order,description,parent)
+		VALUES(#{pcname},#{order},#{description},#{parent})
+	</insert>
+
+<!-- 查询分类表中的数据 -->
+	<select id="findProduct_categoriesByName" resultType="com.us.po.Product_categories" parameterType="java.lang.String">
+	SELECT us_product_categories.* FROM
+		us_product_categories where us_product_categories.pcname=#{pcname}
+	</select>
+	
+	<!-- 查询分类表中的数据 -->
+	<select id="findPcnameByPcid" resultType="java.lang.String" parameterType="int">
+	SELECT us_product_categories.pcname FROM
+		us_product_categories where us_product_categories.pcid=#{pcid}
+	</select>
+</mapper>

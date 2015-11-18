@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.us.mapper.AdminsCustomMapper">
+<!--根据用户名和密码来查询用户 -->
+	<select id="findAdminsPasswordAndUsername" parameterType="com.us.po.AdminsCustom"
+		resultType="com.us.po.AdminsCustom">
+		SELECT us_admins.* FROM us_admins where
+		us_admins.username=#{username} AND
+		us_admins.password=#{password}
+	</select>
+	<!-- 更新用户登录时间 ，和用户的客户端系统和ip-->
+	<update id="updateadminsCustomLoged" parameterType="com.us.po.AdminsCustom">
+      UPDATE us_admins SET us_admins.loged=#{loged},us_admins.ip=#{ip},us_admins.agent=#{agent} WHERE us_admins.id =#{id}
+    </update>
+</mapper>

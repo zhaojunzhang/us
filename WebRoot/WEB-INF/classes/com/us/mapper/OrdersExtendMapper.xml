@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.us.mapper.OrdersExtendMapper">
+	<!-- 	//根据用户UId查找用户的订单数 -->
+	<select id="findOrdersExtendCountByUid" parameterType="com.us.po.PageBean" resultType="int">
+			SELECT COUNT(*) FROM us_orders WHERE uid=#{uid}
+	</select>
+	<!--//通过orderid找时间  -->
+	<select id="findCreated" parameterType="int" resultType="com.us.po.OrdersExtend" >
+		SELECT * FROM us_orders WHERE orderid=#{value}
+	</select>
+	
+   <!-- 通过orderitems查找用户id	 -->
+	<select id="findUIdByOrderid" parameterType="int" resultType="int">
+	SELECT uid FROM us_orders WHERE orderid=#{value}
+	</select>
+	
+	<!-- 删除订单 -->
+	<select id="deleteOrdersByOrderid" parameterType="int">
+		DELETE FROM us_orders WHERE orderid=#{orderid}
+	</select>
+	
+	<!-- 通过uid查找订单 -->
+	<select id="findOrdersExtendByUid" parameterType="int" resultType="com.us.po.OrdersExtend">
+		SELECT * FROM us_orders WHERE uid=#{value} ORDER BY orderid DESC
+	</select>
+	
+    <!-- 生成订单 -->
+    <insert id="insertOrders" parameterType="com.us.po.OrdersExtend"
+		useGeneratedKeys="true" keyProperty="orderid" >
+		insert INTO us_orders (uid,us_orders.TYPE,total,created,us_orders.STATUS,us_orders.COMMENT) 
+		VALUES(#{uid},#{type},#{total},#{created},#{status},#{comment})
+		</insert>
+		<!-- 查看所有订单 -->
+	<select id="findAllOrdersExtend" parameterType="com.us.po.PageBean"
+		resultType="com.us.po.OrdersExtend">
+		SELECT * FROM us_orders  ORDER BY us_orders.orderid DESC
+		LIMIT #{start},#{numperpage}
+	</select>
+	
+      <!-- 根据用户id来查看订单 -->
+     <select id="findUidByOrderidPage" parameterType="com.us.po.PageBean"
+		resultType="com.us.po.OrdersExtend">
+		SELECT * FROM us_orders 
+		where us_orders.uid=#{uid}  ORDER BY us_orders.orderid DESC LIMIT #{start},#{numperpage}
+	 </select>
+	 
+	 <!-- 根据orderid来查看订单 -->
+	  <select id="findOrdersByOrderid" parameterType="int"
+		resultType="com.us.po.OrdersExtend">
+		SELECT * FROM us_orders where us_orders.orderid=#{orderid}
+	 </select>
+	 
+</mapper>

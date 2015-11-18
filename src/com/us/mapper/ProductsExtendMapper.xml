@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.us.mapper.ProductsExtendMapper">
+	
+
+	<!-- 更新商品的浏览次数 -->
+	<update id="productsExtendView" parameterType="int" >
+		UPDATE us_products  SET views=views+1 WHERE pid=#{pid}
+		
+	</update>
+	<!-- 1//通过商品id号查找商品分类-->
+	<select id="findPcateByPid"  parameterType="int" resultType="int" >
+		SELECT pcid FROM us_products WHERE pid=#{value}
+	</select>
+	
+	<!--2 //根据商品的名找到商品id-->
+	 <select id="findPidByName"  parameterType="String" resultType="com.us.po.ProductsExtend">
+	 	SELECT * FROM us_products WHERE us_products.name LIKE '%${value}%'
+	 </select>
+	
+	<!-- 3限量抢购商品 -->
+	<update id="updateQuantity"  parameterType="com.us.po.ProductsExtend">
+	UPDATE us_products SET	quantity=#{quantity} WHERE	pid=#{pid}
+	</update>
+	
+<!-- 根据商品名称查询商品的总数 -->
+	<select id="findProductsCountByName" resultType="Integer"
+		parameterType="com.us.po.PageBean">
+		SELECT COUNT(*) FROM us_products where us_products.name LIKE '%${conditionValue}%'and status=#{status}
+	</select>	
+	
+	<!-- 根据商品分类查询商品的总数 -->
+	<select id="findProductsCountByPcid" resultType="Integer"
+		parameterType="com.us.po.PageBean">
+		SELECT COUNT(*) FROM us_products where us_products.pcid=#{pcid} and status=#{status}
+	</select>
+		
+	<!-- 根据商品类型查询商品的总数 -->
+	<select id="findProductsCountByType" resultType="Integer"
+		parameterType="com.us.po.PageBean">
+		SELECT COUNT(*) FROM us_products where us_products.type LIKE '%${conditionValue}%' and status=#{status}
+	</select>	
+
+<!-- 根据商品的名称进行模糊查询 -->
+	<select id="findByConditionByName" parameterType="com.us.po.PageBean"
+		resultType="com.us.po.ProductsExtend">
+		SELECT * FROM us_products where status=#{status} and
+		us_products.name  LIKE '%${conditionValue}%' LIMIT #{start},#{numperpage}
+	</select>
+	
+	<!-- 根据商品分类进行模糊查询 -->
+	<select id="findByConditionByPcid" parameterType="com.us.po.PageBean"
+		resultType="com.us.po.ProductsExtend">
+		SELECT * FROM us_products where status=#{status} and
+		us_products.pcid=#{pcid} LIMIT #{start},#{numperpage}
+	</select>
+	
+	<!-- 根据商品的类型进行模糊查询 -->
+	<select id="findByConditionByType" parameterType="com.us.po.PageBean"
+		resultType="com.us.po.ProductsExtend">
+		SELECT * FROM us_products where status=#{status} and
+		us_products.type  LIKE '%${conditionValue}%' LIMIT #{start},#{numperpage}
+	</select>
+
+	<!-- 6根据商品名称查询findTypePcnameByName -->
+	<select id="findTypePcnameByName" parameterType="com.us.po.ProductsExtend"
+		resultType="com.us.po.ProductsExtend">
+		SELECT * FROM us_products WHERE us_products.name LIKE
+		'%${name}%' and status=1 and quantity!=0 AND type=#{type}
+	</select>
+	
+	<!-- 7查询所有status=1，quantity=0的商品 -->
+	<select id="findProductsRecord" parameterType="com.us.po.ProductsExtend" resultType="com.us.po.ProductsExtend">
+		SELECT * FROM us_products WHERE STATUS=1 AND quantity=0 and type=#{type}
+	</select>
+	
+	 <!-- 8查询商品分类 -->
+   <select id="findPcategories"  parameterType="com.us.po.ProductsQuery"
+		resultType="com.us.po.ProductsExtend">
+  SELECT * FROM us_products,us_product_categories WHERE
+   STATUS=1 and quantity!=0 AND pcname=#{pcname} and type=#{type} AND us_product_categories.pcid=us_products.pcid
+  </select>
+	
+	<!-- 9查询商品的type -->
+	<select id="findProductsType"  parameterType="com.us.po.ProductsExtend" resultType="com.us.po.ProductsExtend">
+		SELECT * FROM us_products WHERE STATUS=1 AND quantity!=0 AND TYPE=#{type}
+	</select>
+	
+	<!-- 10根据商品id删除商品 -->
+	<select id="deleteProductsById" parameterType="int">
+		DELETE FROM
+		us_products WHERE pid=#{id}
+	</select>
+	
+	<!-- 11修改商品信息 -->
+	<update id="updateProductsById" parameterType="com.us.po.ProductsExtend">
+		UPDATE us_products SET
+		status=#{status} WHERE
+		pid=#{pid}
+	</update>
+	
+<!-- 12查询商品的总数 -->
+	<select id="findProductsCount" parameterType="int" resultType="Integer">
+		SELECT COUNT(*) FROM us_products where status=#{value}
+	</select>
+	
+<!-- //根据商品的分类查询商品的总数 -->	
+	<select id="findShangeChengCountByType" parameterType="com.us.po.PageBean" resultType="Integer">
+		SELECT COUNT(*) FROM  us_products WHERE TYPE=#{type} AND STATUS=#{status}  AND quantity!=0
+	</select>
+	
+<!-- 13分页查询商品 -->
+	<select id="findProductsByPage" parameterType="com.us.po.PageBean"
+		resultType="com.us.po.ProductsExtend">
+		SELECT * FROM us_products where	status=#{status}
+		LIMIT #{start},#{numperpage}
+	</select>
+	<!-- 根据商品的type查找商品 -->
+	<select id="findProductsByType" parameterType="com.us.po.PageBean"
+		resultType="com.us.po.ProductsExtend">
+		SELECT * FROM us_products where	status=#{status} and type=#{type} AND quantity!=0
+		 ORDER BY pid DESC LIMIT #{start},#{numperpage} 
+	</select>
+	
+		<!-- 14根据id查询商品 -->
+	<select id="findProductsById" parameterType="int"
+		resultType="com.us.po.ProductsExtend">
+		SELECT * FROM us_products WHERE
+		pid=#{pid}
+	</select>
+		<!-- 查询所有status=1，quantity！=0的商品 -->
+	<select id="findAllProducts" parameterType="com.us.po.ProductsExtend"
+		resultType="com.us.po.ProductsExtend">
+		SELECT * FROM us_products WHERE	status=#{status} and type=#{type}and quantity!=0  ORDER BY pid DESC LIMIT 0,5
+	</select>
+  <!--15 插入商品 -->
+	
+<insert id="insertProducts" parameterType="com.us.po.ProductsExtend"
+		useGeneratedKeys="true" keyProperty="pid">
+		INSERT INTO
+		us_products(pcid,name,soldprice,oldprice,quantity,type,summary,pdescription,model,views,
+		commentcount,address,status,comment,us_products.limit,mainimages,pcreated)
+		VALUES(#{pcid},#{name},#{soldprice},#{oldprice},#{quantity},#{type},#{summary},#{pdescription}
+		,#{model},#{views},#{commentcount},#{address},#{status},#{comment},#{limit},#{mainimages},#{pcreated})
+	</insert>
+
+
+     <!-- 根据商品名称查询商品 -->
+     <select id="findProductsByPcname" parameterType="java.lang.String"
+		resultType="com.us.po.ProductsExtend">
+		SELECT * FROM us_products WHERE
+		us_products.name=#{name}
+	</select>
+</mapper>

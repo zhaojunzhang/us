@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.us.mapper.OrderitemsExtendMapper">
+
+	<!-- 1.根据pid找到orderID -->
+	<select id="findOrderidByPid" parameterType="int"
+		resultType="com.us.po.OrderitemsExtend">
+		SELECT orderid FROM us_orderitems WHERE pid=#{pid}
+	</select>
+
+	<!-- 2//根据商品id统计订单明细 -->
+	<select id="countOrdritemsByPid" parameterType="com.us.po.PageBean"
+		resultType="int">
+		SELECT COUNT(*) FROM us_orderitems WHERE
+		us_orderitems.pid=#{pid}
+	</select>
+
+	<!-- 3 //通过orderitemsid查找pid -->
+	<select id="findPidByOrderitemsid" parameterType="int"
+		resultType="int">
+		SELECT pid FROM us_orderitems WHERE us_orderitems.orderitemid=#{value}
+	</select>
+
+	<!-- 4统计订单明细的总数 -->
+	<select id="orderitemsCount" resultType="Integer">
+		SELECT COUNT(*) FROM
+		us_orderitems
+	</select>
+	<!-- 5分页查询订单明细表 -->
+	<select id="findOrderitemsExtendByPage" parameterType="com.us.po.PageBean"
+		resultType="com.us.po.OrderitemsExtend">
+		SELECT * FROM us_orderitems ORDER BY
+		us_orderitems.orderitemid DESC
+		LIMIT #{start},#{numperpage}
+	</select>
+
+	<!--6 分页查询订单明细表 -->
+	<select id="findOrderitemsExtendByPid" parameterType="com.us.po.PageBean"
+		resultType="com.us.po.OrderitemsExtend">
+		SELECT * FROM us_orderitems where us_orderitems.pid=#{pid}
+		LIMIT #{start},#{numperpage}
+	</select>
+
+	<!-- 8通过orderid查找订单明细 -->
+	<select id="findOrderitemsByOrderid" parameterType="int"
+		resultType="com.us.po.OrderitemsExtend">
+		SELECT * FROM us_orderitems WHERE
+		us_orderitems.orderid=#{value}
+	</select>
+
+
+	<!-- 9生成订单明细 -->
+	<insert id="insertOrderitems" parameterType="com.us.po.OrderitemsExtend"
+		useGeneratedKeys="true" keyProperty="orderitemsid">
+		insert INTO us_orderitems
+		(orderid,pid,subtotal,fare,COMMENT,oquantity,oprice)
+		VALUES(#{orderid},#{pid},#{subtotal},#{fare},#{comment},#{oquantity},#{oprice})
+	</insert>
+
+	<!-- 通过pid查找订单明细 -->
+	<select id="findOrdersExtendByPid" parameterType="int"
+		resultType="com.us.po.OrderitemsExtend">
+		SELECT * FROM us_orderitems WHERE us_orderitems.pid=#{pid}
+	</select>
+
+</mapper>

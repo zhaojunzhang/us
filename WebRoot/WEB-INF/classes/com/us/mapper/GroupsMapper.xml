@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.us.mapper.GroupsMapper">
+	<!--插入用户分组 -->
+	<insert id="insertGroups" parameterType="com.us.po.Groups"
+		useGeneratedKeys="true" keyProperty="gid">
+		insert into
+		us_groups(name,comment,authority)
+		values(#{name},#{comment},#{authority})
+	</insert>
+
+	<!-- 通过用户组gid查询用户组 -->
+	<select id="findGroupsByGid" parameterType="int" resultType="com.us.po.Groups">
+
+		SELECT us_groups.* FROM
+		us_groups where us_groups.gid=#{gid}
+	</select>
+
+	<!-- 通过用户组名称来查询用户组 -->
+	<select id="findGroupsByName" parameterType="java.lang.String"
+		resultType="com.us.po.Groups">
+
+		SELECT us_groups.* FROM
+		us_groups where
+		us_groups.name=#{name}
+	</select>
+
+	<select id="findGroupsByNameAndAuthority" parameterType="com.us.po.Groups" resultType="com.us.po.Groups">
+	
+		SELECT us_groups.* FROM
+		us_groups where
+		us_groups.name=#{name} and us_groups.authority=#{authority}
+	</select>
+</mapper>

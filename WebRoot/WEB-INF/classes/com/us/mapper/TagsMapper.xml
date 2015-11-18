@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.us.mapper.TagsMapper">
+
+ <!--添加文章标签 -->
+	<insert id="insertTags" parameterType="com.us.po.Tags"
+	  useGeneratedKeys="true" keyProperty="tid">
+		insert into
+		us_tags(name,comment
+		)
+		values(#{name},#{comment}
+		)
+	</insert>
+	<!-- 根据标签名来查询标签-->
+	<select id="findTagsByName" parameterType="com.us.po.Tags" resultType="com.us.po.Tags">
+	SELECT us_tags.* FROM us_tags where us_tags.name =#{name}
+	</select>
+	
+	<!-- 根据标签Tid来查询标签 -->
+	<select id="findTagsByTid" parameterType="int" resultType="com.us.po.Tags">
+	SELECT us_tags.* FROM us_tags where us_tags.tid =#{tid}
+	</select>
+	</mapper>

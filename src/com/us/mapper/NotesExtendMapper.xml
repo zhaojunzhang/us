@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.us.mapper.NotesExtendMapper">
+
+	<!-- //根据noteid查找uid
+	public Integer findUidByNoteid(int noteid)throws Exception; -->
+	<select id="findUidByNoteid" parameterType="int" resultType="Integer">
+		SELECT uid FROM us_notes	 WHERE noteid=#{noteid}
+	</select>
+	<!-- 统计留言总数 -->
+	<select id="findNotesCount" resultType="Integer">
+		SELECT COUNT(*) FROM us_notes
+	</select>
+	<!-- 统计留言总数 -->
+	<select id="findNotesCountName"  parameterType="int" resultType="Integer">
+		SELECT COUNT(*) FROM us_notes  where uid=#{uid}
+	</select>
+	<!-- 分页查询商品 -->
+	<select id="findByPageNotes" parameterType="com.us.po.PageBean"	resultType="com.us.po.NotesExtend">
+		
+			SELECT * FROM us_notes LIMIT #{start},#{numperpage}
+		</select>
+	<!-- 分页查询商品 -->
+	<select id="findByPageNotesName" parameterType="com.us.po.PageBean"	resultType="com.us.po.NotesExtend">
+			SELECT * FROM us_notes WHERE uid=#{uid} LIMIT #{start},#{numperpage}
+		</select>
+	
+	
+	<!-- 插入用户留言 -->
+	<insert id="insertNotes"   parameterType="com.us.po.NotesExtend"
+		useGeneratedKeys="true" keyProperty="noteid">
+	INSERT us_notes (uid,content,status,comment,ncreated)VALUES(#{uid},#{content},#{status},#{comment},#{ncreated})
+  </insert>
+    <!-- 查询所有的留言 -->
+     <select id="findAllNotesWeb" resultType="com.us.po.NotesExtend">
+     	SELECT * FROM us_notes  ORDER BY noteid DESC LIMIT 0,20
+     </select>
+       <!-- 查询所有的留言 -->
+     <select id="findAllNotes" resultType="com.us.po.NotesExtend">
+     	SELECT * FROM us_notes  ORDER BY noteid DESC 
+     </select>
+     <!-- 	//根据id删除留言-->
+	<delete id="deleteNotes" parameterType="int">
+		DELETE FROM us_notes WHERE noteid =#{noteid}	
+	</delete>
+</mapper>
